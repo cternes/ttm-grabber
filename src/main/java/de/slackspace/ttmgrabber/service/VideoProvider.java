@@ -20,7 +20,8 @@ import org.jsoup.select.Elements;
 
 @Stateless
 public class VideoProvider {
-     
+    
+    private final Logger logger = Logger.getLogger(getClass().toString());
     private static String WEBSITE_URL = "http://www.playboy.de/videos/test_the_max";
     private static String MEDIA_URL = "http://images1.playboy.de/files/html/podcasts/medien/";
     private static String VIDEO_CLIPS = "var video_clips =";
@@ -29,15 +30,20 @@ public class VideoProvider {
     VideoCache cache; 
     
     public List<VideoItem> fetchVideos() {
+        logger.log(Level.INFO, "Start video fetching...");
+        
         //try first to fetch from cache
         if(cache.getCachedVideos() != null && cache.getCachedVideos().size() > 0) {
-            System.out.println("From cache...");
+            logger.log(Level.INFO, "Serving " + cache.getCachedVideos().size() + " videos from cache...");
             return cache.getCachedVideos();
         }
         
         try {
+            logger.log(Level.INFO, "Connecting to server " + WEBSITE_URL);
             Element doc = Jsoup.connect(WEBSITE_URL).get();
             Elements scriptNodes = doc.getElementsByTag("script");
+            
+            logger.log(Level.INFO, "Found " + scriptNodes.size() + " script nodes.");
         
             for (Element node : scriptNodes) {
                 if(node.data().contains(VIDEO_CLIPS)) {
@@ -54,11 +60,15 @@ public class VideoProvider {
     }
     
     private List<VideoItem> getVideoList(String js) {
+        logger.log(Level.INFO, "Trying to extract json data...");
+        
         String json = extractJson(js);
         if(json != null) {
+            logger.log(Level.INFO, "Extracted json. Trying to parse...");
             return parseJson(json);
         }
         
+        logger.log(Level.WARNING, "Failed to extract json data!");
         return new ArrayList<VideoItem>();
     }
     
@@ -77,6 +87,9 @@ public class VideoProvider {
         List<VideoItem> resultList = new ArrayList<VideoItem>();
         JsonReader reader = Json.createReader(new StringReader(jsonData));
         JsonArray jsonList = reader.readArray();
+        
+        logger.log(Level.INFO, "Found " + jsonList.size() + " videos in json array");
+        
         for (int i = 0; i < jsonList.size(); i++) {
             JsonObject jsonObj = jsonList.getJsonObject(i);
             String text = jsonObj.getString("text");

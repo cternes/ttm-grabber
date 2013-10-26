@@ -3,6 +3,8 @@ package de.slackspace.ttmgrabber.cache;
 import de.slackspace.ttmgrabber.entity.VideoItem;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
@@ -12,6 +14,7 @@ import javax.ejb.Singleton;
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class VideoCache {
 
+    private final Logger logger = Logger.getLogger(getClass().toString());
     private ConcurrentHashMap<String, List<VideoItem>> cache;
 
     @PostConstruct
@@ -24,10 +27,12 @@ public class VideoCache {
     }
     
     public void putVideos(List<VideoItem> list) {
+        logger.log(Level.INFO, "Adding videos to cache. Number of videos: " + list.size());
         cache.put("videos", list);
     }
     
     public void clear() {
+        logger.log(Level.INFO, "Clearing cache.");
         cache.clear();
     }
 }
