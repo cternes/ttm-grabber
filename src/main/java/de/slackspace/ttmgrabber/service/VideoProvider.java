@@ -30,7 +30,7 @@ public class VideoProvider {
     
     public List<VideoItem> fetchVideos() {
         //try first to fetch from cache
-        if(cache.getCachedVideos() != null) {
+        if(cache.getCachedVideos() != null && cache.getCachedVideos().size() > 0) {
             System.out.println("From cache...");
             return cache.getCachedVideos();
         }
