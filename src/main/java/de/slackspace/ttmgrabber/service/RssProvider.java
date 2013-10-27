@@ -1,4 +1,4 @@
-package de.slackspace.ttmgrabber.service;
+    package de.slackspace.ttmgrabber.service;
 
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndContentImpl;
@@ -28,7 +28,7 @@ public class RssProvider {
             entry.setTitle(item.getText());
             
             SyndContent desc = new SyndContentImpl();
-            desc.setType("text/html");
+            desc.setType("application/rss+xml");
             desc.setValue(item.getText());
             entry.setDescription(desc);
             
@@ -46,6 +46,7 @@ public class RssProvider {
         feed.setTitle(feedTitle);
         feed.setDescription(feedDescription);
         feed.setLink(feedUrl);
+        feed.setEncoding("UTF-8");
 
         return feed;
     }
