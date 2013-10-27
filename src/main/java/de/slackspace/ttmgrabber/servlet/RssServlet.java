@@ -25,6 +25,9 @@ public class RssServlet extends HttpServlet {
         SyndFeed feed = rssProvider.createFeed();
         SyndFeedOutput output = new SyndFeedOutput();
         
+        resp.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/rss+xml");
+        
         try {
             output.output(feed, resp.getWriter());
         } catch (FeedException ex) {
