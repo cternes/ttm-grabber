@@ -1,3 +1,3 @@
-The OpenShift `jbossas` cartridge documentation can be found at:
+TTM-Grabber
 
-https://github.com/openshift/origin-server/tree/master/cartridges/openshift-origin-cartridge-jbossas/README.md
+A video grabber ready to to run on OpenShift.
