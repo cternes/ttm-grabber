@@ -93,6 +93,8 @@ public class VideoProvider {
         for (int i = 0; i < jsonList.size(); i++) {
             JsonObject jsonObj = jsonList.getJsonObject(i);
             String text = jsonObj.getString("text");
+            text = prepareText(text);
+            
             String video = jsonObj.getString("video");
             video = prepareVideoLink(video);
             
@@ -110,5 +112,9 @@ public class VideoProvider {
         }
         
         return originalLink;
+    }
+
+    private String prepareText(String text) {
+        return text.replaceAll("<br />", " - ");
     }
 }
